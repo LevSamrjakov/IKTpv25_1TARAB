@@ -61,16 +61,17 @@ BEGIN
 INSERT INTO Brands(BrandName) VALUES (@BrandName);
 SELECT * FROM Brands;
 END;
---Procedure activation
+--Call
 EXEC LisaBrand 'Nintendo';
 
+--Procedure that deletes categories
 CREATE PROCEDURE DataDelete
 @id int
 as
 Begin
 DELETE FROM Brands WHERE BrandID = @id
 End;
---Deletion
+--Call
 EXEC DataDelete 6;
 SELECT * FROM Brands;
 
@@ -81,7 +82,7 @@ as
 BEGIN
 SELECT * FROM Brands WHERE BrandName LIKE @Taht+'%';
 END
-
+--Call
 EXEC FirstLetterSearch 'A';
 
 --Procude that updates tables
@@ -94,5 +95,56 @@ UPDATE Brands SET BrandName = @NewBrandName
 WHERE BrandID = @ID;
 END;
 --Call
-EXEC NewBrand 4, 'Oculus';
+EXEC NewBrand 4, 'Microsoft';
 SELECT * FROM Brands;
+SELECT * FROM Products;
+
+--Iseseisvalt: Categories - loo protseduurid, millega saab lisada uuendada kustutada.
+
+--Procedure which uses INSERT to add data inside a table Categories.
+CREATE PROCEDURE LisaCategories
+@CategoryName varchar(30)
+as
+BEGIN
+SELECT * FROM Categories;
+INSERT INTO Categories(CategoryName) VALUES (@CategoryName);
+SELECT * FROM Categories;
+END;
+--Call
+EXEC LisaCategories 'Tablets';
+
+--Procedure that deletes categories
+CREATE PROCEDURE DataDeleteCategories
+@id int
+as
+Begin
+SELECT * FROM Categories;
+DELETE FROM Categories WHERE CategoryID = @id
+SELECT * FROM Categories;
+End;
+--Call
+EXEC DataDeleteCategories 6;
+
+--First letter search
+CREATE PROCEDURE FirstLetterCategories
+@Taht char(1)
+as
+BEGIN
+SELECT * FROM Categories WHERE CategoryName LIKE @Taht+'%';
+END
+--Call
+EXEC FirstLetterSearch 'A';
+
+--Procedure that updates tables
+CREATE PROCEDURE NewCategory
+@ID int,
+@NewCategoryName varchar(50)
+AS
+BEGIN
+SELECT * FROM Categories;
+UPDATE Categories SET CategoryName = @NewCategoryName
+WHERE CategoryID = @ID;
+SELECT * FROM Categories;
+END;
+--Call
+EXEC NewCategory 4, 'Tablets';
