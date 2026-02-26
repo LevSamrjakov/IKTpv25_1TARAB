@@ -6,3 +6,5 @@ Parem klik hiirega DATABASE DIAGRAMM--New DB diagramm:
 <img width="1039" height="378" alt="{C64220E6-6E9B-4AF2-ADAF-CA2F24A12178}" src="https://github.com/user-attachments/assets/cb3270d2-da0a-4a0d-93db-ae9089cd4504" />
 
 <img width="352" height="513" alt="{A378DE8A-9023-4557-BA5B-3D684F2DA562}" src="https://github.com/user-attachments/assets/a6436ac2-ac7d-44a7-be1e-eb299d380a58" />
+
+<img width="932" height="372" alt="{2F62427F-2145-4593-86B0-91BA447C0063}" src="https://github.com/user-attachments/assets/d9550594-f19d-443f-9ab1-51758749c835" />
