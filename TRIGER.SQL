@@ -111,3 +111,95 @@ WHERE LinnId = 2;
 
 SELECT * FROM Linnad;
 SELECT * FROM Logi;
+
+--INSERT, DELETE Trigger
+CREATE TRIGGER LinnaLisamineKustutamine
+ON Linnad
+FOR INSERT, DELETE
+AS
+BEGIN
+SET NOCOUNT ON;
+
+	INSERT INTO Logi(Kuupaev, Andmed, KasutajaNimi)
+	SELECT
+	GETDATE(),
+	CONCAT('Lisatud linn: ', inserted.LinnaNimi,
+	' | Rahvaarv: ', inserted.RahvaArv, ' | ID: ', inserted.LinnID),
+	SYSTEM_USER
+	FROM inserted
+
+	UNION ALL
+	
+	SELECT
+	GETDATE(),
+	CONCAT('Kustutatud linn: ', deleted.LinnaNimi,
+	' | Rahvaarv: ', deleted.RahvaArv, ' | ID: ', deleted.LinnID),
+	SYSTEM_USER
+	FROM deleted;
+END;
+--Deaktiveerime LinnaLisamine ja LinnaKustutamine
+DISABLE TRIGGER LinnaLisamine ON Linnad;
+DISABLE TRIGGER LinnaKustutamine ON Linnad;
+
+--Ülesanne
+--Tabeli lisamine
+CREATE TABLE Auto(
+AutoID INT PRIMARY KEY IDENTITY(1,1),
+AutoNumber char(6),
+Omanik varchar(40),
+Mark varchar(40),
+Aasta INT);
+
+SELECT * FROM Auto;
+
+CREATE TABLE AutoLogi(
+ID INT PRIMARY KEY IDENTITY(1,1),
+Kuupaev DATETIME,
+Andmed TEXT,
+KasutajaNimi varchar(40));
+
+SELECT * FROM AutoLogi;
+
+--3 Trigerid
+--1. INSERT TRIGGER
+CREATE TRIGGER AutoLisamine
+ON Auto
+FOR INSERT
+AS
+INSERT INTO AutoLogi(Kuupaev, Andmed, KasutajaNimi)
+SELECT 
+GETDATE(),
+CONCAT('Lisatud auto number: ', inserted.AutoNumber,
+' | Omanik: ', inserted.Omanik, ' | Mark: ', inserted.Mark,
+' | Aasta: ', inserted.Aasta, ' | ID: ', inserted.AutoID),
+SYSTEM_USER
+FROM inserted;
+
+--2. DELETE TRIGGER
+CREATE TRIGGER AutoKustutamine
+ON Auto
+FOR DELETE
+AS
+INSERT INTO AutoLogi(Kuupaev, Andmed, KasutajaNimi)
+SELECT
+GETDATE(),
+CONCAT('Kustutatud auto number: ', deleted.AutoNumber,
+' | Omanik: ', deleted.Omanik, ' | Mark: ', deleted.Mark,
+' | Aasta: ', deleted.Aasta, ' | ID: ', deleted.AutoID),
+SYSTEM_USER
+FROM deleted;
+
+--3. UPDATE TRIGGER
+CREATE TRIGGER AutoUuendamine
+ON Auto
+FOR UPDATE
+AS INSERT INTO AutoLogi(Kuupaev, Andmed, KasutajaNimi)
+SELECT
+GETDATE(),
+CONCAT('Vana auto number andmed: ', d.LinnaNimi,
+' | Rahvaarv: ', d.RahvaArv, ' | ID: ', d.AutoID,
+' | Uued linna andmed: ', I.LinnaNimi,
+' | Rahvaarv: ', I.RahvaArv, ' | ID: ', I.AutoID)
+FROM deleted D INNER JOIN inserted I
+ON D.AutoID = I.AutoID;
+
